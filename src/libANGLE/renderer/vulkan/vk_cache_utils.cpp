@@ -5657,6 +5657,14 @@ angle::Result YcbcrConversionDesc::init(ErrorContext *context,
         externalFormat.externalFormat    = mExternalOrVkFormat;
         samplerYcbcrConversionInfo.pNext = &externalFormat;
     }
+#elif defined(VK_USE_PLATFORM_OHOS)
+    VkExternalFormatOHOS externalFormat = {};
+    if (getExternalFormat() != 0)
+    {
+        externalFormat.sType             = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_OHOS;
+        externalFormat.externalFormat    = mExternalOrVkFormat;
+        samplerYcbcrConversionInfo.pNext = &externalFormat;
+    }
 #else
     // We do not support external format for any platform other than Android.
     ASSERT(mIsExternalFormat == 0);

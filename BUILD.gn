@@ -473,6 +473,10 @@ config("angle_common_config") {
     libs += [ "log" ]
   }
 
+  if (is_ohos) {
+    libs += [ "hilog_ndk.z" ]
+  }
+
   if (is_win && !angle_is_winuwp && !build_with_chromium) {
     # Needed for futex support
     libs += [ "synchronization.lib" ]
@@ -675,7 +679,7 @@ angle_static_library("angle_gpu_info_util") {
     libs += [ "dxgi.lib" ]
   }
 
-  if (is_linux || is_chromeos) {
+  if (is_linux || is_chromeos || is_ohos) {
     sources += libangle_gpu_info_util_linux_sources
 
     if (angle_use_x11 && angle_has_build) {

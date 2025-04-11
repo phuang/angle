@@ -93,7 +93,7 @@ VkResult FindAndAllocateCompatibleMemory(vk::ErrorContext *context,
                                          uint32_t *memoryTypeIndexOut,
                                          vk::DeviceMemory *deviceMemoryOut)
 {
-    VkDevice device = context->getDevice();
+    VkDevice device        = context->getDevice();
     vk::Renderer *renderer = context->getRenderer();
 
     VK_RESULT_TRY(memoryProperties.findCompatibleMemoryIndex(
@@ -977,6 +977,12 @@ PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDR
 PFN_vkCreateStreamDescriptorSurfaceGGP vkCreateStreamDescriptorSurfaceGGP = nullptr;
 #    endif
 
+#    if defined(ANGLE_PLATFORM_OHOS)
+// VK_OHOS_external_memory
+PFN_vkGetNativeBufferPropertiesOHOS vkGetNativeBufferPropertiesOHOS = nullptr;
+PFN_vkGetMemoryNativeBufferOHOS vkGetMemoryNativeBufferOHOS         = nullptr;
+#    endif
+
 #    define GET_INSTANCE_FUNC(vkName)                                                          \
         do                                                                                     \
         {                                                                                      \
@@ -1089,6 +1095,14 @@ void InitExternalMemoryHardwareBufferANDROIDFunctions(VkDevice device)
 void InitGGPStreamDescriptorSurfaceFunctions(VkInstance instance)
 {
     GET_INSTANCE_FUNC(vkCreateStreamDescriptorSurfaceGGP);
+}
+#    endif  // defined(ANGLE_PLATFORM_GGP)
+
+#    if defined(ANGLE_PLATFORM_OHOS)
+void InitExternalMemoryNativeBufferOHOSFunctions(VkInstance instance)
+{
+    GET_INSTANCE_FUNC(vkGetNativeBufferPropertiesOHOS);
+    GET_INSTANCE_FUNC(vkGetMemoryNativeBufferOHOS);
 }
 #    endif  // defined(ANGLE_PLATFORM_GGP)
 

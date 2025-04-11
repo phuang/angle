@@ -21,6 +21,10 @@
 #    include <android/log.h>
 #endif
 
+#if defined(ANGLE_PLATFORM_OHOS)
+#    include <hilog/log.h>
+#endif
+
 #if defined(ANGLE_PLATFORM_APPLE)
 #    include <os/log.h>
 #endif
@@ -265,6 +269,33 @@ void Trace(LogSeverity severity, const char *message)
         }
         __android_log_print(android_priority, "ANGLE", "%s: %s\n", LogSeverityName(severity),
                             str.c_str());
+        // Note: we also log to stdout/stderr below.
+#endif
+
+#if defined(ANGLE_PLATFORM_OHOS)
+        LogLevel logLevel = LOG_ERROR;
+        switch (severity)
+        {
+            case LOG_INFO:
+            case LOG_EVENT:
+                logLevel = ::LOG_INFO;
+                break;
+            case LOG_WARN:
+                logLevel = ::LOG_WARN;
+                break;
+            case LOG_ERR:
+                logLevel = ::LOG_ERROR;
+                break;
+            case LOG_FATAL:
+                logLevel = ::LOG_FATAL;
+                break;
+            default:
+                UNREACHABLE();
+        }
+        OH_LOG_Print(LOG_APP, logLevel, 0x00FF,
+                     "ANGLE",
+                     "%{public}s: %{public}s",
+                     LogSeverityName(severity), str.c_str());
         // Note: we also log to stdout/stderr below.
 #endif
 

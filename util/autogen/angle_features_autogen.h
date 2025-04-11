@@ -361,6 +361,7 @@ enum class Feature
     SupportsMultisampledRenderToSingleSampled,
     SupportsMultiview,
     SupportsNonConstantLoopIndexing,
+    SupportsOhosNativeBuffer,
     SupportsPipelineCreationFeedback,
     SupportsPipelineProtectedAccess,
     SupportsPipelineRobustness,

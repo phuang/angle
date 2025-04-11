@@ -4093,6 +4093,27 @@ bool ValidateCreateImage(const ValidationContext *val,
         }
         break;
 
+        case EGL_NATIVE_BUFFER_OHOS:
+        {
+            if (!displayExtensions.imageNativeBuffer)
+            {
+                val->setError(EGL_BAD_PARAMETER, "EGL_OHOS_image_native_buffer not supported.");
+                return false;
+            }
+
+            if (context != nullptr)
+            {
+                val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
+                return false;
+            }
+
+            ANGLE_EGL_TRY_RETURN(
+                val->eglThread,
+                display->validateImageClientBuffer(context, target, buffer, attributes),
+                val->entryPoint, val->labeledObject, false);
+        }
+        break;
+
         case EGL_D3D11_TEXTURE_ANGLE:
             if (!displayExtensions.imageD3D11Texture)
             {

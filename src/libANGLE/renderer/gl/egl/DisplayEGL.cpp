@@ -102,7 +102,7 @@ EGLSyncImpl *DisplayEGL::createSync()
 
 const char *DisplayEGL::getEGLPath() const
 {
-#if defined(ANGLE_PLATFORM_ANDROID)
+#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_OHOS)
 #    if defined(__LP64__)
     return "/system/lib64/libEGL.so";
 #    else
@@ -863,7 +863,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
         outExtensions->imageGlColorspace = mEGL->hasExtension("EGL_EXT_image_gl_colorspace");
     }
 
-    outExtensions->imageNativeBuffer = mEGL->hasExtension("EGL_ANDROID_image_native_buffer");
+    outExtensions->imageNativeBuffer = mEGL->hasExtension("EGL_ANDROID_image_native_buffer") ||
+                                       mEGL->hasExtension("EGL_OHOS_image_native_buffer");
 
     outExtensions->getFrameTimestamps = mEGL->hasExtension("EGL_ANDROID_get_frame_timestamps");
 

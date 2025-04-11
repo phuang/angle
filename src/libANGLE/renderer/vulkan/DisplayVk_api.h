@@ -62,6 +62,11 @@ DisplayImpl *CreateVulkanGGPDisplay(const egl::DisplayState &state);
 bool IsVulkanMacDisplayAvailable();
 DisplayImpl *CreateVulkanMacDisplay(const egl::DisplayState &state);
 #endif  // defined(ANGLE_PLATFORM_APPLE)
+
+#if defined(ANGLE_PLATFORM_OHOS)
+bool IsVulkanOHOSDisplayAvailable();
+DisplayImpl *CreateVulkanOHOSDisplay(const egl::DisplayState &state);
+#endif  // defined(ANGLE_PLATFORM_APPLE)
 }  // namespace rx
 
 #endif /* LIBANGLE_RENDERER_VULKAN_DISPLAYVK_API_H_ */

@@ -65,6 +65,8 @@
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
 #        include "libANGLE/renderer/gl/egl/android/DisplayAndroid.h"
+#    elif defined(ANGLE_PLATFORM_OHOS)
+#        include "libANGLE/renderer/gl/egl/ohos/DisplayOHOS.h"
 #    else
 #        error Unsupported OpenGL platform.
 #    endif
@@ -333,10 +335,10 @@ EGLAttrib GetDisplayTypeFromEnvironment()
     return EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE;
 #elif defined(ANGLE_ENABLE_D3D9)
     return EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
-#elif defined(ANGLE_ENABLE_VULKAN) && defined(ANGLE_PLATFORM_ANDROID)
+#elif defined(ANGLE_ENABLE_VULKAN) && (defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_OHOS))
     return EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
 #elif defined(ANGLE_ENABLE_OPENGL)
-#    if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_USE_GBM)
+#    if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_OHOS) || defined(ANGLE_USE_GBM)
     return EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
 #    else
     return EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE;
@@ -453,6 +455,10 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             // No GL support on this platform, fail display creation.
             impl = nullptr;
             break;
+#    elif defined(ANGLE_PLATFORM_OHOS)
+            // No GL support on this platform, fail display creation.
+            impl = nullptr;
+            break;
 
 #    else
 #        error Unsupported OpenGL platform.
@@ -498,6 +504,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             }
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             impl = new rx::DisplayAndroid(state);
+#    elif defined(ANGLE_PLATFORM_OHOS)
+            impl = new rx::DisplayOHOS(state);
 #    else
             // No GLES support on this platform, fail display creation.
             impl = nullptr;
@@ -591,6 +599,12 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             if (rx::IsVulkanMacDisplayAvailable())
             {
                 impl = rx::CreateVulkanMacDisplay(state);
+            }
+            break;
+#    elif defined(ANGLE_PLATFORM_OHOS)
+            if (rx::IsVulkanOHOSDisplayAvailable())
+            {
+                impl = rx::CreateVulkanOHOSDisplay(state);
             }
             break;
 #    else

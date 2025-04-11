@@ -104,6 +104,13 @@
             ]
         },
         {
+            "name": "supports_ohos_native_buffer",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_OHOS_external_memory extension"
+            ]
+        },
+        {
             "name": "supports_GGP_frame_token",
             "category": "Features",
             "description": [
