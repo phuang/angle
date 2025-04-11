@@ -3522,6 +3522,16 @@ void Renderer::enableDeviceExtensionsNotPromoted(const vk::ExtensionNameList &de
     ASSERT(!mFeatures.supportsGGPFrameToken.enabled);
 #endif
 
+#if defined(ANGLE_PLATFORM_OHOS)
+    if (mFeatures.supportsOhosNativeBuffer.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME);
+        mEnabledDeviceExtensions.push_back(VK_OHOS_EXTERNAL_MEMORY_EXTENSION_NAME);
+    }
+#else
+    ASSERT(!mFeatures.supportsOhosNativeBuffer.enabled);
+#endif
+
     if (mFeatures.supportsExternalMemoryFd.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
@@ -4112,6 +4122,13 @@ void Renderer::initDeviceExtensionEntryPoints()
         InitExternalMemoryHardwareBufferANDROIDFunctions(mDevice);
     }
 #    endif
+
+#    if defined(ANGLE_PLATFORM_OHOS)
+    if (mFeatures.supportsOhosNativeBuffer.enabled)
+    {
+        InitExternalMemoryNativeBufferOHOSFunctions(mDevice)
+    }
+#    endif
     if (mFeatures.supportsSynchronization2.enabled)
     {
         InitSynchronization2Functions(mDevice);
@@ -4664,11 +4681,11 @@ gl::Version Renderer::getMaxSupportedESVersion() const
     // If the Vulkan transform feedback extension is not present, we use an emulation path that
     // requires the vertexPipelineStoresAndAtomics feature. Without the extension or this feature,
     // we can't currently support transform feedback.
-    if (!vk::CanSupportTransformFeedbackExtension(mTransformFeedbackFeatures) &&
-        !vk::CanSupportTransformFeedbackEmulation(mPhysicalDeviceFeatures))
-    {
-        maxVersion = LimitVersionTo(maxVersion, {2, 0});
-    }
+    // if (!vk::CanSupportTransformFeedbackExtension(mTransformFeedbackFeatures) &&
+    //     !vk::CanSupportTransformFeedbackEmulation(mPhysicalDeviceFeatures))
+    // {
+    //     maxVersion = LimitVersionTo(maxVersion, {2, 0});
+    // }
 
     // Limit to GLES 2.0 if maxPerStageDescriptorUniformBuffers is too low.
     // Table 6.31 MAX_VERTEX_UNIFORM_BLOCKS minimum value = 12
@@ -4860,6 +4877,8 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     const bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
     const bool isBroadcom = IsBroadcom(mPhysicalDeviceProperties.vendorID);
     const bool isSamsung  = IsSamsung(mPhysicalDeviceProperties.vendorID);
+    const bool isHuawei   = IsHuawei(mPhysicalDeviceProperties.vendorID);
+
     const bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 
@@ -4928,7 +4947,8 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // deteriorating performance on the other.  ANGLE will accordingly make some decisions based on
     // the device architecture for optimal performance on both.
     const bool isImmediateModeRenderer = isNvidia || isAMD || isIntel || isSamsung || isSwiftShader;
-    const bool isTileBasedRenderer     = isARM || isPowerVR || isQualcomm || isBroadcom || isApple;
+    const bool isTileBasedRenderer =
+        isARM || isPowerVR || isQualcomm || isBroadcom || isApple || isHuawei;
 
     // Make sure all known architectures are accounted for.
     if (!isImmediateModeRenderer && !isTileBasedRenderer && !isMockICDEnabled())
@@ -5025,6 +5045,13 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
             ExtensionFound(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME, deviceExtensionNames));
 #endif
 
+#if defined(ANGLE_PLATFORM_OHOS)
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsOhosNativeBuffer,
+        IsOHOS() && ExtensionFound(VK_OHOS_EXTERNAL_MEMORY_EXTENSION_NAME, deviceExtensionNames) &&
+            ExtensionFound(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME, deviceExtensionNames));
+#endif
+
 #if defined(ANGLE_PLATFORM_GGP)
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsGGPFrameToken,
@@ -5067,7 +5094,7 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         &mFeatures, supportsExternalFenceFd,
         ExtensionFound(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME, deviceExtensionNames));
 
-#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX)
+#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX) || defined(ANGLE_PLATFORM_OHOS)
     if (mFeatures.supportsExternalFenceCapabilities.enabled &&
         mFeatures.supportsExternalSemaphoreCapabilities.enabled)
     {

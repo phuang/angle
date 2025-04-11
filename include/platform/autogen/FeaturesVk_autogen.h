@@ -98,6 +98,12 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo supportsOhosNativeBuffer = {
+        "supportsOhosNativeBuffer",
+        FeatureCategory::VulkanFeatures,
+        &members,
+    };
+
     FeatureInfo supportsGGPFrameToken = {
         "supportsGGPFrameToken",
         FeatureCategory::VulkanFeatures,

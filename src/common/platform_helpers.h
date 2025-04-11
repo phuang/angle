@@ -87,6 +87,15 @@ inline constexpr bool IsWindows()
 #endif
 }
 
+inline constexpr bool IsOHOS()
+{
+#if defined(ANGLE_PLATFORM_OHOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
 // Helper for version number comparisons
 struct VersionTriple
 {

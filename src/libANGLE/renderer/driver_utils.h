@@ -117,6 +117,11 @@ inline bool IsSamsung(uint32_t vendorId)
     return vendorId == VENDOR_ID_SAMSUNG;
 }
 
+inline bool IsHuawei(uint32_t vendorId)
+{
+    return vendorId = 0x19E5;
+}
+
 inline bool IsVivante(uint32_t vendorId)
 {
     return vendorId == VENDOR_ID_VIVANTE;
@@ -193,6 +198,7 @@ bool operator>=(const angle::VersionInfo &a, const angle::VersionTriple &b);
 
 // Platform helpers
 using angle::IsAndroid;
+using angle::IsOHOS;
 using angle::IsApple;
 using angle::IsChromeOS;
 using angle::IsFuchsia;

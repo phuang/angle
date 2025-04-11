@@ -218,7 +218,7 @@ std::vector<const char *> gdEQPForwardFlags;
 const char *GetDefaultAPIName()
 {
 #if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX) || \
-    defined(ANGLE_PLATFORM_WINDOWS)
+    defined(ANGLE_PLATFORM_WINDOWS) || defined(ANGLE_PLATFORM_OHOS)
     return "angle-vulkan";
 #elif defined(ANGLE_PLATFORM_APPLE)
     return "angle-gl";

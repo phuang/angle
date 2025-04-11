@@ -95,6 +95,12 @@ extern PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBuf
 extern PFN_vkCreateStreamDescriptorSurfaceGGP vkCreateStreamDescriptorSurfaceGGP;
 #    endif  // defined(ANGLE_PLATFORM_GGP)
 
+#    if defined(ANGLE_PLATFORM_OHOS)
+// VK_OHOS_external_memory
+extern PFN_vkGetNativeBufferPropertiesOHOS vkGetNativeBufferPropertiesOHOS;
+extern PFN_vkGetMemoryNativeBufferOHOS vkGetMemoryNativeBufferOHOS;
+#    endif
+
 // VK_KHR_shared_presentable_image
 extern PFN_vkGetSwapchainStatusKHR vkGetSwapchainStatusKHR;
 

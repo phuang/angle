@@ -536,8 +536,9 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glTexture2DImage      = true;
     outExtensions->glTextureCubemapImage = true;
     outExtensions->glTexture3DImage      = getFeatures().supportsSampler2dViewOf3d.enabled;
-    outExtensions->glRenderbufferImage = true;
-    outExtensions->imageNativeBuffer     = getFeatures().supportsAndroidHardwareBuffer.enabled;
+    outExtensions->glRenderbufferImage   = true;
+    outExtensions->imageNativeBuffer     = getFeatures().supportsAndroidHardwareBuffer.enabled ||
+                                           getFeatures().supportsOhosNativeBuffer.enabled;
     outExtensions->surfacelessContext = true;
     outExtensions->glColorspace       = true;
     outExtensions->imageGlColorspace =
@@ -567,7 +568,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->contextPriority = !getFeatures().allocateNonZeroMemory.enabled;
     outExtensions->noConfigContext = true;
 
-#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX)
+#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX) || defined(ANGLE_PLATFORM_OHOS)
     outExtensions->nativeFenceSyncANDROID = getFeatures().supportsAndroidNativeFenceSync.enabled;
 #endif  // defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX)
 

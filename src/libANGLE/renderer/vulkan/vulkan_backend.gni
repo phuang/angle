@@ -180,6 +180,19 @@ if (is_android) {
   ]
 }
 
+if (is_ohos) {
+  vulkan_backend_sources += [
+    "ohos/DisplayVkOHOS.cpp",
+    "ohos/DisplayVkOHOS.h",
+    "ohos/NativeBufferImageSiblingVkOHOS.cpp",
+    "ohos/NativeBufferImageSiblingVkOHOS.h",
+    # "ohos/OHOSFunctions.cpp",
+    # "ohos/OHOSFunctions.h",
+    "ohos/WindowSurfaceVkOHOS.cpp",
+    "ohos/WindowSurfaceVkOHOS.h",
+  ]
+}
+
 if (is_win) {
   vulkan_backend_sources += [
     "win32/DisplayVkWin32.cpp",

@@ -910,16 +910,16 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     // textureHalfFloatLinearOES, textureFloatOES, textureFloatLinearOES, textureRgEXT, sRGB,
     // colorBufferFloatRgbCHROMIUM, colorBufferFloatRgbaCHROMIUM and colorBufferFloatEXT were
     // verified. Verify the rest.
-    packedDepthStencilOES    = DeterminePackedDepthStencilSupport(textureCaps);
-    rgba8ARM                 = DetermineRGBA8TextureSupport(textureCaps);
-    rgb8Rgba8OES             = rgba8ARM && DetermineRGB8TextureSupport(textureCaps);
-    readDepthNV              = DetermineReadDepthSupport(textureCaps);
-    readStencilNV            = DetermineReadStencilSupport(textureCaps);
-    depthBufferFloat2NV      = DetermineDepthBufferFloat2Support(textureCaps);
+    packedDepthStencilOES     = DeterminePackedDepthStencilSupport(textureCaps);
+    rgba8ARM                  = DetermineRGBA8TextureSupport(textureCaps);
+    rgb8Rgba8OES              = rgba8ARM && DetermineRGB8TextureSupport(textureCaps);
+    readDepthNV               = DetermineReadDepthSupport(textureCaps);
+    readStencilNV             = DetermineReadStencilSupport(textureCaps);
+    depthBufferFloat2NV       = DetermineDepthBufferFloat2Support(textureCaps);
     requiredInternalformatOES = DetermineRequiredInternalFormatTextureSupport(textureCaps);
-    textureFormatBGRA8888EXT = DetermineBGRA8TextureSupport(textureCaps);
-    readFormatBgraEXT        = DetermineBGRAReadFormatSupport(textureCaps);
-    textureHalfFloatOES      = DetermineHalfFloatTextureSupport(textureCaps);
+    textureFormatBGRA8888EXT  = DetermineBGRA8TextureSupport(textureCaps);
+    readFormatBgraEXT         = DetermineBGRAReadFormatSupport(textureCaps);
+    textureHalfFloatOES       = DetermineHalfFloatTextureSupport(textureCaps);
     textureHalfFloatLinearOES =
         DetermineHalfFloatTextureFilteringSupport(textureCaps, textureHalfFloatOES);
     textureFloatOES       = DetermineFloatTextureSupport(textureCaps);
@@ -1366,7 +1366,11 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANDROID_presentation_time",                       presentationTime,                   &extensionStrings);
     InsertExtensionString("EGL_ANDROID_blob_cache",                              blobCache,                          &extensionStrings);
     InsertExtensionString("EGL_ANDROID_framebuffer_target",                      framebufferTargetANDROID,           &extensionStrings);
+    #if defined(ANGLE_PLATFORM_OHOS)
+    InsertExtensionString("EGL_OHOS_image_native_buffer",                        imageNativeBuffer,                  &extensionStrings);
+    #else
     InsertExtensionString("EGL_ANDROID_image_native_buffer",                     imageNativeBuffer,                  &extensionStrings);
+    #endif
     InsertExtensionString("EGL_ANDROID_get_frame_timestamps",                    getFrameTimestamps,                 &extensionStrings);
     InsertExtensionString("EGL_ANDROID_front_buffer_auto_refresh",               frontBufferAutoRefreshANDROID,      &extensionStrings);
     InsertExtensionString("EGL_ANGLE_timestamp_surface_attribute",               timestampSurfaceAttributeANGLE,     &extensionStrings);
